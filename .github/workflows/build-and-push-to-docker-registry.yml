@@ -26,10 +26,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository_name }}:${{ github.sha }}
+          tags: katzex/cloud-app:${{ github.sha }}
           file: Dockerfile
 
       - name: Image details
         run: |
           echo "Pushed image: ${{ steps.docker-build-push.outputs.digest }}"
-          echo "Image tag: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository_name }}:${{ github.sha }}"
+          echo "Image tag: katzex/cloud-app:${{ github.sha }}"
