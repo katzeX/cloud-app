@@ -10,4 +10,9 @@ class MainController {
     fun main(): String {
         return "Hello World!"
     }
+
+    @GetMapping("/test")
+    fun test(): String {
+        return "This is a test endpoint!"
+    }
 }
