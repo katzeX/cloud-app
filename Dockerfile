@@ -1,4 +1,3 @@
-FROM ubuntu:latest
 FROM gradle:8.7-jdk AS build
 WORKDIR /home/gradle/project
 COPY --chown=gradle:gradle . /home/gradle/project
