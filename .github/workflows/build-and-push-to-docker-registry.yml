@@ -2,7 +2,7 @@ name: Build Docker Image and Push to Docker Registry
 
 on:
   push:
-    branches: [main]
+    branches: [feature/test-deployment]
 
 jobs:
   build-and-push:
@@ -26,6 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          platforms: linux/arm64 # for M1 chip
           tags: katzex/cloud-app:${{ github.sha }}
           file: Dockerfile
 
