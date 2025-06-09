@@ -2,6 +2,7 @@ package md.utm.cloudapp.rest
 
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.time.Instant.now
 import kotlin.math.sqrt
 
 @RestController
@@ -19,6 +20,14 @@ class MainController {
 
         return "This is a test endpoint!"
     }
+
+    @GetMapping("/test-time")
+    fun testTime(): String {
+        println("Test time request")
+
+        return now().toString()
+    }
+
 
     @GetMapping("/cpu-test")
     fun cpuTesting(): String {
