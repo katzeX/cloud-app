@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xd-cloud-app-service
+  labels:
+    app: cloud-app
+spec:
+  selector:
+    app: cloud-app # Matches the labels in your Deployment's pod template
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80 # The port to expose the service on within the cluster
+      targetPort: 8080 # The port container is listening on
+  type: ClusterIP # For external access via Rancher Desktop's Traefik
+  # Or use: type: ClusterIP (for internal cluster access only)
+  # Or use: type: NodePort (exposes on a specific port on each node)
+
+

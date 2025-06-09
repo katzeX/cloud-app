@@ -1,0 +1,24 @@
+# Common heavy folders
+node_modules/
+target/
+dist/
+kube-prometheus-stack/
+prometheus-crds/
+
+# Helm/Grafana stuff
+charts/
+grafana/
+*.tgz
+
+# Kubernetes manifests (if not needed in build)
+*.yaml
+
+# IDE junk
+.idea/
+.vscode/
+
+# Logs, configs, temp
+*.log
+*.tmp
+*.bak
+.DS_Store

@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "md.utm"
-version = "0.0.1-SNAPSHOT"
+version = project.property("version") as String
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -20,8 +20,10 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation ("io.micrometer:micrometer-registry-prometheus")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -35,3 +37,20 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.register("printVersion") {
+    doLast {
+        println(version)
+    }
+}
+
+tasks.register("dockerBuild") {
+    dependsOn("build")
+
+    doLast {
+        exec {
+            commandLine("docker", "build", "-t", "katzex/cloud-app:$version", "--build-arg", "VERSION=$version", ".")
+        }
+    }
+}
+
