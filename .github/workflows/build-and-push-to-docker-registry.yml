@@ -2,7 +2,7 @@ name: Build Docker Image and Push to Docker Registry
 
 on:
   push:
-    branches: [main]
+    branches: [feature/last-adjustments]
 
 jobs:
   build-and-push:
@@ -21,15 +21,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Get Project version
+        id: project-version
+        run: |
+          VERSION=$(./gradlew printVersion --quiet | tail -n 1)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Build and push Docker image
         id: docker-build-push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: katzex/cloud-app:${{ github.sha }}
+          platforms: linux/arm64 # for M1 chip
+          tags: katzex/cloud-app:${{ steps.project-version.outputs.version }}
           file: Dockerfile
+          build-args: |
+            VERSION=${{ steps.project-version.outputs.version }}
 
       - name: Image details
         run: |
-          echo "Pushed image: ${{ steps.docker-build-push.outputs.digest }}"
-          echo "Image tag: katzex/cloud-app:${{ github.sha }}"
+          echo "Pushed image digest: ${{ steps.docker-build-push.outputs.digest }}"
+          echo "Image tag: katzex/cloud-app:${{ steps.project-version.outputs.version }}"

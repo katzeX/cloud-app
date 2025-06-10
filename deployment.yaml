@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xd-cloud-app-deployment
+spec:
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-app
+  template:
+    metadata:
+      labels:
+        app: cloud-app
+    spec:
+      containers:
+        - name: xd-cloud-app-container
+          image: katzex/cloud-app:latest
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          # 'Always' pulls from registry before starting the container
+          # 'Never' forces Kubernetes to only look locally.
+          # 'IfNotPresent' tries locally first, then a registry.
+          readinessProbe:
+            httpGet:
+              path: /actuator/health #ensures pods are up and running, before deleting the old one
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
